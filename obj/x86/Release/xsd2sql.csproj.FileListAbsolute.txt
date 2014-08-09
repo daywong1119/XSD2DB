@@ -1,0 +1,15 @@
+C:\Users\Michael\Desktop\xsd2sql\bin\Release\xsd2sql.exe
+C:\Users\Michael\Desktop\xsd2sql\bin\Release\xsd2sql.pdb
+C:\Users\Michael\Desktop\xsd2sql\obj\x86\Release\xsd2sql.Form1.resources
+C:\Users\Michael\Desktop\xsd2sql\obj\x86\Release\xsd2sql.Properties.Resources.resources
+C:\Users\Michael\Desktop\xsd2sql\obj\x86\Release\xsd2sql.csproj.GenerateResource.Cache
+C:\Users\Michael\Desktop\xsd2sql\obj\x86\Release\xsd2sql.exe
+C:\Users\Michael\Desktop\xsd2sql\obj\x86\Release\xsd2sql.pdb
+D:\Projects\xsd2sql\obj\x86\Release\xsd2sql.exe
+D:\Projects\xsd2sql\obj\x86\Release\xsd2sql.pdb
+D:\Projects\xsd2sql\bin\Release\xsd2sql.exe
+D:\Projects\xsd2sql\bin\Release\xsd2sql.pdb
+D:\Projects\xsd2sql\obj\x86\Release\xsd2sql.csprojResolveAssemblyReference.cache
+D:\Projects\xsd2sql\obj\x86\Release\xsd2sql.Form1.resources
+D:\Projects\xsd2sql\obj\x86\Release\xsd2sql.Properties.Resources.resources
+D:\Projects\xsd2sql\obj\x86\Release\xsd2sql.csproj.GenerateResource.Cache
