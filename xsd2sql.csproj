@@ -62,6 +62,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataSetObject\ByHtmlTBLId.cs" />
+    <Compile Include="DataSetObject\ById.cs" />
+    <Compile Include="DataSetObject\ByMatching.cs" />
+    <Compile Include="DataSetObject\ByStr.cs" />
+    <Compile Include="DataSetObject\ColMatch.cs" />
+    <Compile Include="DataSetObject\DatabaseObject.cs" />
+    <Compile Include="DataSetObject\DbTbl.cs" />
+    <Compile Include="DataSetObject\HtmlFile.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -70,8 +78,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SQLhelper.cs" />
-    <Compile Include="XsdTypePolicy.cs" />
+    <Compile Include="helper\SQLhelper.cs" />
+    <Compile Include="Policy\XsdTypePolicy.cs" />
     <Compile Include="XsPrimaryKey.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

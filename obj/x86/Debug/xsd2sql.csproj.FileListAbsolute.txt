@@ -22,3 +22,11 @@ D:\Projects\xsd2sql\obj\x86\Debug\xsd2sql.csprojResolveAssemblyReference.cache
 D:\Projects\xsd2sql\obj\x86\Debug\xsd2sql.Form1.resources
 D:\Projects\xsd2sql\obj\x86\Debug\xsd2sql.Properties.Resources.resources
 D:\Projects\xsd2sql\obj\x86\Debug\xsd2sql.csproj.GenerateResource.Cache
+D:\Projects\XSD2DB\bin\Debug\xsd2sql.exe
+D:\Projects\XSD2DB\obj\x86\Debug\xsd2sql.exe
+D:\Projects\XSD2DB\obj\x86\Debug\xsd2sql.Form1.resources
+D:\Projects\XSD2DB\obj\x86\Debug\xsd2sql.Properties.Resources.resources
+D:\Projects\XSD2DB\obj\x86\Debug\xsd2sql.csproj.GenerateResource.Cache
+D:\Projects\XSD2DB\obj\x86\Debug\xsd2sql.pdb
+D:\Projects\XSD2DB\obj\x86\Debug\xsd2sql.csprojResolveAssemblyReference.cache
+D:\Projects\XSD2DB\bin\Debug\xsd2sql.pdb

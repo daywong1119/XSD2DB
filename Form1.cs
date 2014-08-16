@@ -12,6 +12,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.XPath;
+using System.Xml.Serialization;
 
 namespace xsd2sql
 {
@@ -230,6 +231,44 @@ namespace xsd2sql
             }
 
             tableDataGV.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+
+        }
+
+        private void btnReadTamplate_Click(object sender, EventArgs e)
+        {
+            //Read XML and Loop through elements
+            if (string.IsNullOrEmpty(txtPath.Text))
+            {
+                MessageBox.Show("Please select file");
+                return;
+            }
+
+            try
+            {
+                txtContent.Clear();
+                txtContent.Text = File.ReadAllText(openfilePath);
+            }
+            catch
+            {
+                MessageBox.Show("File cannot read");
+            }
+
+            try
+            {
+                XmlReader reader = XmlReader.Create(openfilePath);
+
+                XmlSerializer serializer = new XmlSerializer(typeof(DatabaseObject));
+                DatabaseObject db = (DatabaseObject)serializer.Deserialize(reader);
+                for (int i = 0; i < db.DbTables.Length; i++)
+                {
+                    //MessageBox.Show(db.DbTables[i].HtmlFile[i].FileNames[i].ToString());
+                    MessageBox.Show(db.DbTables[1].MatchingS[i].ByStrS[i].StartStr);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
         }
 
