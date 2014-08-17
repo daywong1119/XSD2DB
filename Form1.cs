@@ -293,14 +293,10 @@ namespace xsd2sql
 						MessageBox.Show("Parsing html file:"+ filename);
 						HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
 						doc.Load(@"assets/"+filename);
-						HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("/html[1]/body[1]"); 
-						foreach (HtmlNode node in nodes) 
-						{ 
-							MessageBox.Show(node.InnerText.Trim()); 
-						} 
+						
+						WebDataController ctrl = new WebDataController(doc);
+						ctrl.ByHtmlTabelId("staff");
 					}
-					
-					
                 }
             }
             catch (Exception ex)
@@ -309,16 +305,5 @@ namespace xsd2sql
             }
 
         }
-		public DataTable XmlStringToDataTable(string filepath)
-		{
-		String Xmlstring = File.ReadAllText(@"assets/"+filepath);
-        XmlDocument Xmldoc = new XmlDocument();
-        Xmldoc.LoadXml(Xmlstring);
-        XmlReader Xmlreader = XmlReader.Create(new System.IO.StringReader(Xmldoc.OuterXml));
-        DataSet ds = new DataSet();
-        ds.ReadXml(Xmlreader);
-        DataTable dt = ds.Tables[0];
-        return dt;
-    	}
     }
 }
