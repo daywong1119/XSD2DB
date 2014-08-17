@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="Company">
+	<xs:complexType>
+		<xs:sequence>
+			<xs:element name="StaffTBL">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="staffId" type="xs:string"/>
+				  		<xs:element name="staffName" type="xs:string"/>
+				  		<xs:element name="joinYear" type="xs:integer"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="OrderTBL">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="orderId" type="xs:string"/>
+						<xs:element name="orderDate" type="xs:date"/>
+						<xs:element name="orderAmt" type="xs:decimal"/>
+						<xs:element name="staffId" type="xs:string"/>
+					</xs:sequence>
+				</xs:complexType>
+	  		</xs:element>
+
+			<xs:element name="ProductTBL">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="productId" type="xs:string"/>
+				  		<xs:element name="productDesc" type="xs:string"/>
+						<xs:element name="productQty" type="xs:integer"/>
+						<xs:element name="productAmt" type="xs:decimal"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+
+			<xs:element name="OrderItemTBL">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="orderId" type="xs:string"/>
+						<xs:element name="productId" type="xs:string"/>
+						<xs:element name="orderQty" type="xs:integer"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<!-- Primary Key -->
+	<xs:key name="PKStaffTBL">
+		<xs:selector xpath="StaffTBL"/>
+		<xs:field xpath="staffId"/>
+	</xs:key>
+
+
+	<!-- Primary Key -->
+	<xs:key name="PKOrderTBL">
+		<xs:selector xpath="OrderTBL"/>
+		<xs:field xpath="orderId"/>
+	</xs:key>
+
+    <!-- Foreign Key -->
+	<xs:keyref name="FKOrderTBL" refer="PKStaffTBL" >
+		<xs:selector xpath="OrderTBL"/>
+		<xs:field xpath="staffId"/>
+	</xs:keyref>
+
+	<!-- Primary Key -->
+	<xs:key name="PKProductTBL">
+		<xs:selector xpath="ProductTBL"/>
+		<xs:field xpath="productId"/>
+	</xs:key>
+
+	<!-- Composite Primary Key -->
+	<xs:key name="PKOrderItemTBL">
+		<xs:selector xpath="OrderItemTBL"/>
+		<xs:field xpath="orderId"/>
+		<xs:field xpath="productId"/>
+	</xs:key>
+</xs:element>
+</xs:schema>

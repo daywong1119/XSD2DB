@@ -30,3 +30,14 @@ D:\Projects\XSD2DB\obj\x86\Debug\xsd2sql.csproj.GenerateResource.Cache
 D:\Projects\XSD2DB\obj\x86\Debug\xsd2sql.pdb
 D:\Projects\XSD2DB\obj\x86\Debug\xsd2sql.csprojResolveAssemblyReference.cache
 D:\Projects\XSD2DB\bin\Debug\xsd2sql.pdb
+C:\Users\Day\Desktop\XSD2DB\bin\Debug\xsd2sql.exe
+C:\Users\Day\Desktop\XSD2DB\bin\Debug\xsd2sql.pdb
+C:\Users\Day\Desktop\XSD2DB\obj\x86\Debug\xsd2sql.csprojResolveAssemblyReference.cache
+C:\Users\Day\Desktop\XSD2DB\obj\x86\Debug\xsd2sql.Form1.resources
+C:\Users\Day\Desktop\XSD2DB\obj\x86\Debug\xsd2sql.Properties.Resources.resources
+C:\Users\Day\Desktop\XSD2DB\obj\x86\Debug\xsd2sql.csproj.GenerateResource.Cache
+C:\Users\Day\Desktop\XSD2DB\obj\x86\Debug\xsd2sql.exe
+C:\Users\Day\Desktop\XSD2DB\obj\x86\Debug\xsd2sql.pdb
+C:\Users\Day\Desktop\XSD2DB\bin\Debug\HtmlAgilityPack.dll
+C:\Users\Day\Desktop\XSD2DB\bin\Debug\HtmlAgilityPack.pdb
+C:\Users\Day\Desktop\XSD2DB\bin\Debug\HtmlAgilityPack.xml

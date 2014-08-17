@@ -11,5 +11,9 @@ namespace xsd2sql.DataSetObject
     {
         [XmlElement("filename")]
         public string[] FileNames { get; set; }
+		
+		public int getFilenamesCount(){
+			return (FileNames == null)? 0 : FileNames.Length;
+		}
     }
 }
