@@ -88,6 +88,7 @@
             // 
             // txtContent
             // 
+            this.txtContent.BackColor = System.Drawing.SystemColors.Window;
             this.txtContent.Location = new System.Drawing.Point(12, 119);
             this.txtContent.Multiline = true;
             this.txtContent.Name = "txtContent";
@@ -102,6 +103,7 @@
             this.txtPath.Name = "txtPath";
             this.txtPath.Size = new System.Drawing.Size(143, 20);
             this.txtPath.TabIndex = 6;
+            this.txtPath.Text = "C:\\Users\\Day\\Desktop\\ADS Demos\\saleInsert(1).xml";
             // 
             // btnCreateDB
             // 
@@ -127,6 +129,8 @@
             // 
             this.tableDataGV.AllowUserToAddRows = false;
             this.tableDataGV.AllowUserToDeleteRows = false;
+            this.tableDataGV.BackgroundColor = System.Drawing.SystemColors.Highlight;
+            this.tableDataGV.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tableDataGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.tableDataGV.Location = new System.Drawing.Point(481, 119);
             this.tableDataGV.Name = "tableDataGV";
@@ -158,6 +162,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(933, 511);
             this.Controls.Add(this.lbLine);
             this.Controls.Add(this.btnReadTamplate);

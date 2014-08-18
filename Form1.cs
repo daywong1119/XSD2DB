@@ -268,6 +268,7 @@ namespace xsd2sql
                 //Tables Looper
                 for (int i = 0; i < db.DbTables.Length; i++)
                 {
+<<<<<<< HEAD
                     if (db.DbTables[i].getHtmlFilesCount() == 0)
                     {
                         MessageBox.Show("Webpage path is not defined,please define <htmlFile> tag");
@@ -298,6 +299,45 @@ namespace xsd2sql
                         WebDataController ctrl = new WebDataController(doc);
                         ctrl.ByHtmlTabelId("staff");
                     }
+=======
+                    //MessageBox.Show(db.DbTables[i].HtmlFile[i].FileNames[i].ToString());
+					//.MatchingS[i].ByStrS[i].StartStr
+                    //MessageBox.Show(db.DbTables[i].TableName.ToString());
+					//MessageBox.Show("db.DbTables[i].HtmlFile.Length=" + db.DbTables[i].HtmlFile.Length);
+					
+					if(db.DbTables[i].getHtmlFilesCount() == 0 ){
+						MessageBox.Show("Webpage path is not defined,please define <htmlFile> tag");
+						return;
+					}				
+					if(db.DbTables[i].HtmlFile[0].getFilenamesCount() == 0){
+						MessageBox.Show("Webpage path is not defined,please define <filename> tag");
+						return;
+					}
+					
+					//Filename looper
+					for(int j = 0; j < db.DbTables[i].HtmlFile[0].getFilenamesCount(); j++){
+						String x = db.DbTables[i].HtmlFile[0].FileNames[j];
+						mFileBuffer.Add(x);
+					}
+
+					for(int k = 0; k < mFileBuffer.Count ; k++){
+						//Parse hmtlfile
+						String filename = mFileBuffer[k].ToString();
+						MessageBox.Show("Parsing html file:"+ filename);
+						HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+						doc.Load(@"assets/"+filename);
+						
+						WebDataController ctrl = new WebDataController(doc);
+						List<String> listofTable = ctrl.ByHtmlTabelId("staff");
+                        List<String> listOfCols = new List<String>();
+                        listOfCols.Add("A");
+                         listOfCols.Add("B");
+                         listOfCols.Add("C");
+                        ctrl.TablesToData(listofTable, listOfCols);
+                        
+
+					}
+>>>>>>> origin/master
                 }
             }
             catch (Exception ex)
