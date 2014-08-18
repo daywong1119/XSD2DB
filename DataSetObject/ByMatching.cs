@@ -12,6 +12,6 @@ namespace xsd2sql.DataSetObject
         [XmlElement("byId")]
         public ById ById { get; set; }
         [XmlElement("byStr")]
-        public ByStr[] ByStrS { get; set; }
+        public ByStr[] ByStrList { get; set; }
     }
 }

@@ -12,6 +12,6 @@ namespace xsd2sql.DataSetObject
         [XmlAttribute("tblId")]
         public string TblId { get; set; }
         [XmlElement("colMatch")]
-        public ColMatch[] ColMatchS { get; set; }
+        public ColMatch[] ColMatchList { get; set; }
     }
 }

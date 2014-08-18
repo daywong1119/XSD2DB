@@ -10,10 +10,17 @@ namespace xsd2sql.DataSetObject
     public class HtmlFile
     {
         [XmlElement("filename")]
-        public string[] FileNames { get; set; }
-		
-		public int getFilenamesCount(){
-			return (FileNames == null)? 0 : FileNames.Length;
-		}
+        public string[] FileNameList { get; set; }
+        [XmlText]
+        public string Value { get; set; }
+
+        [XmlIgnore]
+        public int FileNameCount
+        {
+            get
+            {
+                return (FileNameList == null) ? 0 : FileNameList.Length;
+            }
+        }
     }
 }

@@ -265,73 +265,43 @@ namespace xsd2sql
                 XmlSerializer serializer = new XmlSerializer(typeof(DatabaseObject));
                 DatabaseObject db = (DatabaseObject)serializer.Deserialize(reader);
 
-                //Tables Looper
-                for (int i = 0; i < db.DbTables.Length; i++)
+                foreach (DbTbl tl in db.DbTables)
                 {
-<<<<<<< HEAD
-                    if (db.DbTables[i].getHtmlFilesCount() == 0)
+                    if (tl.HtmlFile == null)
                     {
                         MessageBox.Show("Webpage path is not defined,please define <htmlFile> tag");
                         return;
                     }
-
-                    if (db.DbTables[i].HtmlFile[0].getFilenamesCount() == 0)
+                    if (tl.HtmlFile.FileNameCount == 0)
                     {
                         MessageBox.Show("Webpage path is not defined,please define <filename> tag");
                         return;
                     }
 
-                    //Filename looper
-                    for (int j = 0; j < db.DbTables[i].HtmlFile[0].getFilenamesCount(); j++)
+                    for (int i = 0; i < tl.HtmlFile.FileNameList.Length; i++)
                     {
-                        String x = db.DbTables[i].HtmlFile[0].FileNames[j];
-                        mFileBuffer.Add(x);
+                        String fn = tl.HtmlFile.FileNameList[i];
+                        mFileBuffer.Add(fn);
                     }
-
-                    for (int k = 0; k < mFileBuffer.Count; k++)
-                    {
-                        //Parse hmtlfile
-                        String filename = mFileBuffer[k].ToString();
-                        MessageBox.Show("Parsing html file:" + filename);
-                        HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-                        doc.Load(@"assets/" + filename);
-
-                        WebDataController ctrl = new WebDataController(doc);
-                        ctrl.ByHtmlTabelId("staff");
-                    }
-=======
-                    //MessageBox.Show(db.DbTables[i].HtmlFile[i].FileNames[i].ToString());
-					//.MatchingS[i].ByStrS[i].StartStr
-                    //MessageBox.Show(db.DbTables[i].TableName.ToString());
-					//MessageBox.Show("db.DbTables[i].HtmlFile.Length=" + db.DbTables[i].HtmlFile.Length);
-					
-					if(db.DbTables[i].getHtmlFilesCount() == 0 ){
-						MessageBox.Show("Webpage path is not defined,please define <htmlFile> tag");
-						return;
-					}				
-					if(db.DbTables[i].HtmlFile[0].getFilenamesCount() == 0){
-						MessageBox.Show("Webpage path is not defined,please define <filename> tag");
-						return;
-					}
-					
-					//Filename looper
-					for(int j = 0; j < db.DbTables[i].HtmlFile[0].getFilenamesCount(); j++){
-						String x = db.DbTables[i].HtmlFile[0].FileNames[j];
-						mFileBuffer.Add(x);
-					}
-
-					for(int k = 0; k < mFileBuffer.Count ; k++){
-						//Parse hmtlfile
-						String filename = mFileBuffer[k].ToString();
-						MessageBox.Show("Parsing html file:"+ filename);
-						HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-						doc.Load(@"assets/"+filename);
-						
-						WebDataController ctrl = new WebDataController(doc);
-						ctrl.ByHtmlTabelId("staff");
-					}
->>>>>>> origin/master
                 }
+
+                for (int i = 0; i < mFileBuffer.Count; i++)
+                {
+                    //Parse hmtlfile
+                    String filename = mFileBuffer[i].ToString();
+
+                    HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+                    doc.Load(@"C:\temp\xsd2db-data\" + filename);
+
+                    WebDataController ctrl = new WebDataController(doc);
+                    ctrl.ByHtmlTabelId("staff");
+                }
+
+                // by Dave
+                // check if [dbTBL] -> byhtmlTBLId length > 0 then binding the data into suitable object (entity)
+                // check if [dbTBL] -> byMatching length > 0 then binding the data into suitable object (entity)
+
+
             }
             catch (Exception ex)
             {

@@ -15,9 +15,9 @@ using System.Xml.XPath;
 using System.Xml.Serialization;
 using System.Collections;
 using HtmlAgilityPack;
+using xsd2sql.entity;
 namespace xsd2sql
 {
-<<<<<<< HEAD
     public class WebDataController
     {
         HtmlAgilityPack.HtmlDocument doc;
@@ -26,37 +26,34 @@ namespace xsd2sql
             this.doc = doc;
         }
 
-        public void ByHtmlTabelId(String id)
+        public StaffTbl[] ByHtmlTabelId(String id)
         {
-            HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//table[@id='" + id + "']");
-            foreach (HtmlNode node in nodes)
+            HtmlNode nodes = doc.DocumentNode.SelectSingleNode("//table[@id='" + id + "']");
+
+            HtmlNodeCollection n =nodes.SelectNodes("//tr//th//");
+
+
+            foreach (HtmlNode node in nodes.ChildNodes)
             {
-                MessageBox.Show(node.InnerText.Trim());
+                //MessageBox.Show(node.InnerText);
+
+
+
+
+                if (node.NodeType == HtmlNodeType.Element)
+                {
+                    
+
+
+
+                    //Console.WriteLine(node);
+                }
             }
+
+            //return a StaffTbl Array
         }
 
         public void ByMatchingId(String id) { }
         public void ByMatchingString(String startString, String endString) { }
     }
-=======
-	public class WebDataController
-	{
-		HtmlAgilityPack.HtmlDocument doc;
-		public WebDataController(HtmlAgilityPack.HtmlDocument doc)
-		{
-			this.doc = doc;
-		}
-		
-		public void ByHtmlTabelId(String id){
-			HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//table[@id='"+id+"']"); 
-			foreach (HtmlNode node in nodes) 
-			{ 
-				MessageBox.Show(node.InnerText.Trim()); 
-			} 
-		}	
-		
-		public void ByMatchingId(String id){}
-		public void ByMatchingString(String startString, String endString){}
-	}
->>>>>>> origin/master
 }
