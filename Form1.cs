@@ -328,14 +328,7 @@ namespace xsd2sql
 						doc.Load(@"assets/"+filename);
 						
 						WebDataController ctrl = new WebDataController(doc);
-						List<String> listofTable = ctrl.ByHtmlTabelId("staff");
-                        List<String> listOfCols = new List<String>();
-                        listOfCols.Add("A");
-                         listOfCols.Add("B");
-                         listOfCols.Add("C");
-                        ctrl.TablesToData(listofTable, listOfCols);
-                        
-
+						ctrl.ByHtmlTabelId("staff");
 					}
 >>>>>>> origin/master
                 }

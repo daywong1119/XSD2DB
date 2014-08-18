@@ -46,29 +46,14 @@ namespace xsd2sql
 		{
 			this.doc = doc;
 		}
-
-        public List<String> ByHtmlTabelId(String id)
-        {
-            List<String> listOfTable = new List<String>();
+		
+		public void ByHtmlTabelId(String id){
 			HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//table[@id='"+id+"']"); 
 			foreach (HtmlNode node in nodes) 
 			{ 
-			//	MessageBox.Show(node.InnerText.Trim()); 
-                MessageBox.Show(node.InnerHtml.ToString());
-                listOfTable.Add(node.InnerHtml.ToString());
-            }
-            return listOfTable;
-		}
-	
-        
-        public void TablesToData(List <String>listOfTables,List<String> ListOfColumnName){
-            for(int i = 0;i < listOfTables.Count; i++){
-                String tableText = listOfTables[i];
-                HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-                doc.LoadHtml(tableText);
-                MessageBox.Show("TABLE EXTRACT:" + tableText);
-            }
-        }
+				MessageBox.Show(node.InnerText.Trim()); 
+			} 
+		}	
 		
 		public void ByMatchingId(String id){}
 		public void ByMatchingString(String startString, String endString){}
