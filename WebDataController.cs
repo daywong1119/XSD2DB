@@ -26,31 +26,47 @@ namespace xsd2sql
             this.doc = doc;
         }
 
-        public StaffTbl[] ByHtmlTabelId(String id)
+        //public StaffTbl[] ByHtmlTabelId(String id)
+        //{
+        //    HtmlNode nodes = doc.DocumentNode.SelectSingleNode("//table[@id='" + id + "']");
+
+        //    HtmlNodeCollection n = nodes.SelectNodes("//tr//th//");
+        //    foreach (HtmlNode node in nodes.ChildNodes)
+        //    {
+        //        //MessageBox.Show(node.InnerText);
+        //        if (node.NodeType == HtmlNodeType.Element)
+        //        {
+        //            //Console.WriteLine(node);
+        //        }
+        //    }
+        //    return null;
+        //    //return a StaffTbl Array
+        //}
+        public List<String> ByHtmlTabelId(String id)
         {
-            HtmlNode nodes = doc.DocumentNode.SelectSingleNode("//table[@id='" + id + "']");
-
-            HtmlNodeCollection n =nodes.SelectNodes("//tr//th//");
-
-
-            foreach (HtmlNode node in nodes.ChildNodes)
+            List<String> listOfTable = new List<String>();
+            HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//table[@id='" + id + "']");
+            foreach (HtmlNode node in nodes)
             {
-                //MessageBox.Show(node.InnerText);
-
-
-
-
-                if (node.NodeType == HtmlNodeType.Element)
-                {
-                    
-
-
-
-                    //Console.WriteLine(node);
-                }
+                //	MessageBox.Show(node.InnerText.Trim()); 
+               // MessageBox.Show(node.InnerHtml.ToString());
+                listOfTable.Add(node.InnerHtml.ToString());
             }
+            return listOfTable;
+        }
 
-            //return a StaffTbl Array
+
+        public List<StaffTbl> TablesToData(List<String> listOfTables, List<String> ListOfColumnName)
+        {
+            List<StaffTbl> staffs = new List<StaffTbl>();
+            for (int i = 0; i < listOfTables.Count; i++)
+            {
+                String tableText = listOfTables[i];
+                HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+                doc.LoadHtml(tableText);
+                MessageBox.Show("TABLE EXTRACT:" + tableText);
+            }
+            return staffs;
         }
 
         public void ByMatchingId(String id) { }

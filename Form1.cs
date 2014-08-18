@@ -291,10 +291,12 @@ namespace xsd2sql
                     String filename = mFileBuffer[i].ToString();
 
                     HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-                    doc.Load(@"C:\temp\xsd2db-data\" + filename);
+                    //doc.Load(@"C:\temp\xsd2db-data\" + filename);
+                    doc.Load(@"assets/" + filename);
 
                     WebDataController ctrl = new WebDataController(doc);
-                    ctrl.ByHtmlTabelId("staff");
+                    List<String> tables = ctrl.ByHtmlTabelId("staff");
+                    //TablesToData(tables, tables);
                 }
 
                 // by Dave

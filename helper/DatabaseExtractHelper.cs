@@ -13,8 +13,8 @@ namespace xsd2sql.helper
 
         public string ExtractByhtmlTBLId(HtmlAgilityPack.HtmlDocument doc, string tbname, ByHtmlTBLId tblId)
         {
-            WebDataController ctrl = new WebDataController(doc);
-            StaffTbl[] sales = ctrl.ByHtmlTabelId(tblId.TblId);
+            //WebDataController ctrl = new WebDataController(doc);
+            //StaffTbl[] sales = ctrl.ByHtmlTabelId(tblId.TblId);
 
             return "";
         }

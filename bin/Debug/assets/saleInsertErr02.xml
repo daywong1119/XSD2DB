@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<database dbName="Company">
+	<dbTBL tblName="StaffTBL">
+		<htmlFile>
+			<!-- no <filename> tag -->
+		</htmlFile>
+		<byhtmlTBLId  tblId="staff">
+			<colMatch  fieldName="staffId">Staff ID</colMatch>
+			<colMatch  fieldName="staffName">Name</colMatch>
+			<colMatch  fieldName="joinYear">Join Year</colMatch>
+		</byhtmlTBLId>
+	</dbTBL>
+	<dbTBL tblName="OrderTBL">
+		<htmlFile>
+			<filename>order01.htm</filename>
+			<filename>order02.htm</filename>
+		</htmlFile>
+		<byMatching>
+			<byId fieldName="orderId">orderId</byId>
+			<byStr fieldName="orderAmt">
+				<startStr>&lt;dd id="amount"&gt;Amount :</startStr>
+				<endStr>&lt;/dd&gt;</endStr>
+			</byStr>
+			<byStr fieldName="orderDate">
+				<startStr>&lt;dd id="order_date"&gt;Date of Order :</startStr>
+				<endStr>&lt;/dd&gt;</endStr>
+			</byStr>
+			<byStr fieldName="staffId">
+				<startStr>&lt;dd id="staff_Id"&gt;Done By :</startStr>
+				<endStr>&lt;/dd&gt;</endStr>
+			</byStr>
+		</byMatching>
+	</dbTBL>
+</database>
