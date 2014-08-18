@@ -42,6 +42,7 @@ namespace xsd2sql
         //    return null;
         //    //return a StaffTbl Array
         //}
+
         public List<String> ByHtmlTabelId(String id)
         {
             List<String> listOfTable = new List<String>();
@@ -55,7 +56,7 @@ namespace xsd2sql
             return listOfTable;
         }
 
-
+        //Convert <Tabel>...</Table> Html String to List<StaffTbl> object
         public List<StaffTbl> TablesToData(List<String> listOfTables, List<String> ListOfColumnName)
         {
             List<StaffTbl> staffs = new List<StaffTbl>();
