@@ -41,6 +41,3 @@ C:\Users\Day\Desktop\XSD2DB\obj\x86\Debug\xsd2sql.pdb
 C:\Users\Day\Desktop\XSD2DB\bin\Debug\HtmlAgilityPack.dll
 C:\Users\Day\Desktop\XSD2DB\bin\Debug\HtmlAgilityPack.pdb
 C:\Users\Day\Desktop\XSD2DB\bin\Debug\HtmlAgilityPack.xml
-D:\Projects\XSD2DB\bin\Debug\HtmlAgilityPack.dll
-D:\Projects\XSD2DB\bin\Debug\HtmlAgilityPack.pdb
-D:\Projects\XSD2DB\bin\Debug\HtmlAgilityPack.xml
