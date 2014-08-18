@@ -14,7 +14,7 @@ using System.Xml.Schema;
 using System.Xml.XPath;
 using System.Xml.Serialization;
 using System.Collections;
-using HtmlAgilityPack; 
+using HtmlAgilityPack;
 namespace xsd2sql
 {
     public partial class Form1 : Form
@@ -235,10 +235,10 @@ namespace xsd2sql
 
         }
 
-	
-		//Use to store how many webpage Should be visit in order to grab data
-		private ArrayList mFileBuffer = new ArrayList();
-	
+
+        //Use to store how many webpage Should be visit in order to grab data
+        private ArrayList mFileBuffer = new ArrayList();
+
         private void btnReadTamplate_Click(object sender, EventArgs e)
         {
             //Read XML and Loop through elements
@@ -260,43 +260,44 @@ namespace xsd2sql
 
             try
             {
-				//Read XML
+                //Read XML
                 XmlReader reader = XmlReader.Create(openfilePath);
                 XmlSerializer serializer = new XmlSerializer(typeof(DatabaseObject));
                 DatabaseObject db = (DatabaseObject)serializer.Deserialize(reader);
-                //MessageBox.Show(db.DbTables[1].ToString());
-				for (int i = 0; i < db.DbTables.Length; i++)//Tables Looper
-                {
-                    //MessageBox.Show(db.DbTables[i].HtmlFile[i].FileNames[i].ToString());
-					//.MatchingS[i].ByStrS[i].StartStr
-                    //MessageBox.Show(db.DbTables[i].TableName.ToString());
-					//MessageBox.Show("db.DbTables[i].HtmlFile.Length=" + db.DbTables[i].HtmlFile.Length);
-					
-					if(db.DbTables[i].getHtmlFilesCount() == 0 ){
-						MessageBox.Show("Webpage path is not defined,please define <htmlFile> tag");
-						return;
-					}				
-					if(db.DbTables[i].HtmlFile[0].getFilenamesCount() == 0){
-						MessageBox.Show("Webpage path is not defined,please define <filename> tag");
-						return;
-					}
-					
-					//Filename looper
-					for(int j = 0; j < db.DbTables[i].HtmlFile[0].getFilenamesCount(); j++){
-						String x = db.DbTables[i].HtmlFile[0].FileNames[j];
-						mFileBuffer.Add(x);
-					}
 
-					for(int k = 0; k < mFileBuffer.Count ; k++){
-						//Parse hmtlfile
-						String filename = mFileBuffer[k].ToString();
-						MessageBox.Show("Parsing html file:"+ filename);
-						HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-						doc.Load(@"assets/"+filename);
-						
-						WebDataController ctrl = new WebDataController(doc);
-						ctrl.ByHtmlTabelId("staff");
-					}
+                //Tables Looper
+                for (int i = 0; i < db.DbTables.Length; i++)
+                {
+                    if (db.DbTables[i].getHtmlFilesCount() == 0)
+                    {
+                        MessageBox.Show("Webpage path is not defined,please define <htmlFile> tag");
+                        return;
+                    }
+
+                    if (db.DbTables[i].HtmlFile[0].getFilenamesCount() == 0)
+                    {
+                        MessageBox.Show("Webpage path is not defined,please define <filename> tag");
+                        return;
+                    }
+
+                    //Filename looper
+                    for (int j = 0; j < db.DbTables[i].HtmlFile[0].getFilenamesCount(); j++)
+                    {
+                        String x = db.DbTables[i].HtmlFile[0].FileNames[j];
+                        mFileBuffer.Add(x);
+                    }
+
+                    for (int k = 0; k < mFileBuffer.Count; k++)
+                    {
+                        //Parse hmtlfile
+                        String filename = mFileBuffer[k].ToString();
+                        MessageBox.Show("Parsing html file:" + filename);
+                        HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+                        doc.Load(@"assets/" + filename);
+
+                        WebDataController ctrl = new WebDataController(doc);
+                        ctrl.ByHtmlTabelId("staff");
+                    }
                 }
             }
             catch (Exception ex)
