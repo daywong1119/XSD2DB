@@ -295,8 +295,10 @@ namespace xsd2sql
                     doc.Load(@"assets/" + filename);
 
                     WebDataController ctrl = new WebDataController(doc);
-                    List<String> tables = ctrl.ByHtmlTabelId("staff");
-                    //TablesToData(tables, tables);
+                    List<List<String>> TablesData = ctrl.ByHtmlTabelId("staff");
+
+                    //by Michael Data is extracted to 2 Dimension array , please add break point here to INSPECT
+                    MessageBox.Show(TablesData.ToString());
                 }
 
                 // by Dave
