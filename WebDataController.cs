@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -49,23 +49,36 @@ namespace xsd2sql
             HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//table[@id='" + id + "']");
             foreach (HtmlNode node in nodes)
             {
-                //	MessageBox.Show(node.InnerText.Trim()); 
-               // MessageBox.Show(node.InnerHtml.ToString());
                 listOfTable.Add(node.InnerHtml.ToString());
             }
             return listOfTable;
         }
 
         //Convert <Tabel>...</Table> Html String to List<StaffTbl> object
+        // ++++++++++++++++++++++++++++++
+        // | Header1 | Header2 | Header3|
+        // ++++++++++++++++++++++++++++++
+        // | AAAA    | BBBB    | CCCC   |
+        // ++++++++++++++++++++++++++++++
+        // | DDDD    | EEEE    | FFFF   |
+        // ++++++++++++++++++++++++++++++
         public List<StaffTbl> TablesToData(List<String> listOfTables, List<String> ListOfColumnName)
         {
-            List<StaffTbl> staffs = new List<StaffTbl>();
+            List<String[]> rows = new List<String[]>();
             for (int i = 0; i < listOfTables.Count; i++)
             {
                 String tableText = listOfTables[i];
                 HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
                 doc.LoadHtml(tableText);
-                MessageBox.Show("TABLE EXTRACT:" + tableText);
+                HtmlNodeCollection trCollection = doc.SelectNodes("./tr");
+                foreach (HtmlNode trNode in trCollection)
+                {
+                   HtmlNodeCollection tdCollection = trNode.SelectNodes("./td");
+                    foreach (HtmlNode tdNode in tdCollection){
+                        MessageBox.Show("TD" + tdNode.InnerText.ToString());
+                    }
+                }
+                //MessageBox.Show("TABLE EXTRACT:" + tableText);
             }
             return staffs;
         }
