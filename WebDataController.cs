@@ -62,9 +62,9 @@ namespace xsd2sql
         // ++++++++++++++++++++++++++++++
         // | DDDD    | EEEE    | FFFF   |
         // ++++++++++++++++++++++++++++++
-        public List<StaffTbl> TablesToData(List<String> listOfTables, List<String> ListOfColumnName)
+        public List<List<String>> TablesToData(List<String> listOfTables, List<String> ListOfColumnName)
         {
-            List<String[]> rows = new List<String[]>();
+            List<List<String>> rows = new List<List<String>>();
             for (int i = 0; i < listOfTables.Count; i++)
             {
                 String tableText = listOfTables[i];
@@ -73,14 +73,17 @@ namespace xsd2sql
                 HtmlNodeCollection trCollection = doc.SelectNodes("./tr");
                 foreach (HtmlNode trNode in trCollection)
                 {
-                   HtmlNodeCollection tdCollection = trNode.SelectNodes("./td");
+                    List<String> row = new List<String>();
+                    HtmlNodeCollection tdCollection = trNode.SelectNodes("./td");
                     foreach (HtmlNode tdNode in tdCollection){
-                        MessageBox.Show("TD" + tdNode.InnerText.ToString());
+                        row.add(tdNode.InnerText);
+                        //MessageBox.Show("TD" + tdNode.InnerText.ToString());
                     }
+                    rows.add(row);
                 }
                 //MessageBox.Show("TABLE EXTRACT:" + tableText);
             }
-            return staffs;
+            return rows;
         }
 
         public void ByMatchingId(String id) { }
