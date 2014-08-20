@@ -21,16 +21,26 @@ namespace xsd2sql
     public class WebDataController
     {
         HtmlAgilityPack.HtmlDocument doc;
-        public WebDataController(HtmlAgilityPack.HtmlDocument doc){this.doc = doc;}
+        public WebDataController(HtmlAgilityPack.HtmlDocument doc) { this.doc = doc; }
 
-        public List<List<String>> ByHtmlTabelId(String id) {
+        //By Dave
+        //public List<List<String>> ByHtmlTabelId(String id)
+        //{
+        //    List<String> tables = GetTableString(id);
+        //    List<List<String>> tablesData = TablesToData(tables);
+        //    return tablesData;
+        //}
+
+        //Michael
+        public List<string[]> ByHtmlTabelId(String id,List<String> colNames)
+        {
             List<String> tables = GetTableString(id);
-            List<List<String>> tablesData = TablesToData(tables);
+            List<string[]> tablesData = TablesToDataByMichael(tables, colNames);
             return tablesData;
         }
 
         public void ByMatchingId(String id) { }
-        
+
         public void ByMatchingString(String startString, String endString) { }
 
         //Get every <table>...</table> in the HTML Documents
@@ -59,7 +69,8 @@ namespace xsd2sql
                 {
                     List<String> row = new List<String>();
                     HtmlNodeCollection tdCollection = trNode.SelectNodes("./td");
-                    foreach (HtmlNode tdNode in tdCollection){
+                    foreach (HtmlNode tdNode in tdCollection)
+                    {
                         row.Add(tdNode.InnerText.ToString());
                     }
                     rows.Add(row);
@@ -68,6 +79,52 @@ namespace xsd2sql
             return rows;
         }
 
-       
+
+        //By Michael
+        public List<string[]> TablesToDataByMichael(List<String> listOfTables,List<String> colNames) //
+        {
+            List<int> indexList = new List<int>();
+            List<string[]> rows = new List<string[]>();
+            for (int i = 0; i < listOfTables.Count; i++)
+            {
+                String tableText = listOfTables[i];
+                HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+                doc.LoadHtml(tableText);
+
+                HtmlNodeCollection thCollect = doc.DocumentNode.SelectNodes("//tr//th");
+                //List<String> row = new List<String>();
+                String[] row = new String[colNames.Count];
+                foreach (HtmlNode tdNode in thCollect)
+                {
+                    //User Defind Header list compare with actual table cols
+                    for (int j = 0; j < colNames.Count;j++ ){
+                            String header = colNames[j];
+                            if (String.Equals(tdNode.InnerText.ToString(), header)) { 
+                                indexList.Add(j);
+                                row[j] = header;
+                            }
+                    }
+                    //row.Add(tdNode.InnerText.ToString());
+                }
+                rows.Add(row);//ADD header row
+
+                HtmlNodeCollection trCollection = doc.DocumentNode.SelectNodes("./tr");
+                foreach (HtmlNode trNode in trCollection)
+                {
+                    // header add to array[0], to identify array structure
+                    row = new String[colNames.Count];
+                    HtmlNodeCollection tdCollection = trNode.SelectNodes("./td");
+                    for (int k = 0; k < tdCollection.Count; k++) {
+                        HtmlNode tdNode = tdCollection[k];
+                        row[indexList[k]] = tdNode.InnerText.ToString();
+                    }
+                        // foreach (HtmlNode tdNode in tdCollection){
+                        //   row.Add(tdNode.InnerText.ToString());}
+                        rows.Add(row.ToArray());
+                }
+            }
+            return rows;
+        }
+
     }
 }

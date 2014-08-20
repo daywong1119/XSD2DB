@@ -7,27 +7,19 @@ using System.IO;
 using System.Text;
 using Microsoft.SqlServer.Management.Smo;
 using xsd2sql;
+using xsd2sql.entity;
+using xsd2sql.DataSetObject;
 
 namespace SQLhelper
 {
     public class SQLhelper
     {
         private readonly SqlConnection connection;
-        //private Dictionary<string, XsPrimaryKey> keyDict;
         private SqlCommand comm;
-
-        //public SQLhelper(string connectionString, DataSet source, Dictionary<string, XsPrimaryKey> keys)
-        //{
-        //    connection = new SqlConnection(connectionString);
-        //    dbServer = new Server(new ServerConnection(connection));
-        //    sourceDataSet = source;
-        //    this.keyDict = keys;
-        //}
 
         public SQLhelper(string connectionString)
         {
             connection = new SqlConnection(connectionString);
-            //dbServer = new Server(new ServerConnection(connection));
         }
 
         public SQLhelper()
@@ -38,12 +30,6 @@ namespace SQLhelper
 
         public string GenerateCreateDatabaseSql(string databaseName)
         {
-            //this.databaseName = databaseName;
-            //datebase = dbServer.Databases[databaseName];
-            //if (datebase != null) datebase.Drop();
-            //datebase = new Database(dbServer, databaseName);
-            //datebase.Create();
-
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("IF EXISTS ( SELECT [name] FROM sys.databases WHERE [name] = '" + databaseName + "' )");
             sb.AppendLine("DROP DATABASE " + databaseName + ";");
@@ -122,13 +108,23 @@ namespace SQLhelper
 
                 for (int i = 0; i < table.Columns.Count; i++)
                 {
-                    // col_name col_type, 
-                    sb.AppendFormat("{0} {1}, ", table.Columns[i], CLRTypeToSQLType(table.Columns[i].DataType));
+                    //if type = datetime then not add (100)
+                    if ((CLRTypeToSQLType(table.Columns[i].DataType)).Name.ToLower() == DataType.DateTime.Name)
+                    {
+                        // col_name col_type, 
+                        sb.AppendFormat("{0} {1}, ", table.Columns[i], (CLRTypeToSQLType(table.Columns[i].DataType)).Name.ToLower());
+                    }
+                    //if type = integer then not add (100)
+                    else if ((CLRTypeToSQLType(table.Columns[i].DataType)).Name.ToLower() == DataType.Int.Name)
+                    {
+                        sb.AppendFormat("{0} {1}, ", table.Columns[i], (CLRTypeToSQLType(table.Columns[i].DataType)).Name.ToLower());
+                    }
+                    //if type != datetime then add (100)
+                    else
+                    {
+                        sb.AppendFormat("{0} {1}, ", table.Columns[i], (CLRTypeToSQLType(table.Columns[i].DataType)).Name.ToLower() + " (100)");
+                    }
 
-                    //sb.Append(table.Columns[i]);
-                    //sb.Append(" ");
-                    //sb.Append(CLRTypeToSQLType(table.Columns[i].GetType()));
-                    //sb.Append(", ");
                 }
 
                 //sb.Length -= 2;
@@ -241,7 +237,7 @@ namespace SQLhelper
                 case "String":
                     return DataType.VarCharMax;
 
-                case "Int32":
+                case "Int64":
                     return DataType.Int;
 
                 case "Boolean":
@@ -250,164 +246,66 @@ namespace SQLhelper
                 case "DateTime":
                     return DataType.DateTime;
 
-                case "xs:date":
-                    return DataType.DateTime;
-
-                case "Byte[]":
-                    return DataType.VarBinaryMax;
+                case "Decimal":
+                    return DataType.VarCharMax;
             }
 
             return DataType.VarCharMax;
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //public void PopulateDatabase()
+        //// DbTbl get this parameter
+        //public string InsertStaff(string dbName, string tableName, StaffTbl[] staffList)
         //{
-        //    //CreateTables(sourceDataSet.Tables);
-        //    CreateRelationships();
-        //}
-
-        //private void CreateRelationships()
-        //{
-        //    foreach (DataTable table in sourceDataSet.Tables)
+        //    ByHtmlTBLId htmlId = new ByHtmlTBLId();
+        //    List<string> fieldName = new List<string>();
+        //    StringBuilder sb = new StringBuilder();
+        //    sb.AppendLine("use " + dbName + ";");
+        //    foreach (StaffTbl tl in staffList)
         //    {
-        //        foreach (DataRelation rel in table.ChildRelations)
-        //            CreateRelation(rel);
-        //    }
-        //}
-
-        //private void CreateRelation(DataRelation relation)
-        //{
-
-
-        //    Table primaryTable = datebase.Tables[relation.ParentTable.TableName];
-        //    Table childTable = datebase.Tables[relation.ChildTable.TableName];
-
-        //    ForeignKey fkey = new ForeignKey(childTable, relation.RelationName);
-        //    fkey.ReferencedTable = primaryTable.Name;
-
-        //    fkey.DeleteAction = SQLActionTypeToSMO(relation.ChildKeyConstraint.DeleteRule);
-        //    fkey.UpdateAction = SQLActionTypeToSMO(relation.ChildKeyConstraint.UpdateRule);
-
-
-        //    for (int i = 0; i < relation.ChildColumns.Length; i++)
-        //    {
-        //        DataColumn col = relation.ChildColumns[i];
-        //        ForeignKeyColumn fkc = new ForeignKeyColumn(fkey, col.ColumnName, relation.ParentColumns[i].ColumnName);
-
-        //        fkey.Columns.Add(fkc);
+        //        sb.AppendLine("insert into " + tableName);
+        //        sb.AppendLine("(" + htmlId.ColMatchList.Where(x => x.FieldName == tl.StaffId) + ", " + htmlId.ColMatchList.Where(x => x.FieldName == tl.StaffName) + ", " + htmlId.ColMatchList.Where(x => x.FieldName == tl.JoinYear.ToString()) + ")");
+        //        sb.AppendLine("values ('" + tl.StaffId + "', " + "'" + tl.StaffName + "', " + tl.JoinYear + ");");
         //    }
 
-        //    fkey.Create();
-
-
-        //}
-
-        //private void PopulateTable(ref Table outputTable, DataTable inputTable)
-        //{
-        //    foreach (DataColumn column in inputTable.Columns)
-        //    {
-        //        CreateColumns(ref outputTable, column, inputTable);
-        //    }
-        //}
-
-        //private void CreateColumns(ref Table outputTable, DataColumn inputColumn, DataTable inputTable)
-        //{
-        //    Column newColumn = new Column(outputTable, inputColumn.ColumnName);
-        //    newColumn.DataType = CLRTypeToSQLType(inputColumn.DataType);
-        //    newColumn.Identity = inputColumn.AutoIncrement;
-        //    newColumn.IdentityIncrement = inputColumn.AutoIncrementStep;
-        //    newColumn.IdentitySeed = inputColumn.AutoIncrementSeed;
-        //    newColumn.Nullable = inputColumn.AllowDBNull;
-        //    newColumn.UserData = inputColumn.DefaultValue;
-
-        //    outputTable.Columns.Add(newColumn);
-        //}
-
-        //private void SetPrimaryKeys(ref Table outputTable, DataTable inputTable)
-        //{
-
-        //    if (!keyDict.ContainsKey(outputTable.Name)) return;
-
-        //    XsPrimaryKey key = keyDict[outputTable.Name];
-        //    Index newIndex = new Index(outputTable, key.KeyName);
-        //    newIndex.IndexKeyType = IndexKeyType.DriPrimaryKey;
-        //    newIndex.IsClustered = true;
-
-
-        //    // set primary key to table
-        //    foreach (string f in key.Fields)
-        //    {
-        //        newIndex.IndexedColumns.Add(new IndexedColumn(newIndex, f, false));
-        //    }
-
-        //    if (newIndex.IndexedColumns.Count > 0)
-        //        outputTable.Indexes.Add(newIndex);
-
-
-        //Index newIndex = new Index(outputTable, "PK" + outputTable.Name);
-        //newIndex.IndexKeyType = IndexKeyType.DriPrimaryKey;
-        //newIndex.IsClustered = false;
-
-        //foreach (DataColumn keyColumn in inputTable.PrimaryKey)
-        //{
-        //    newIndex.IndexedColumns.Add(new IndexedColumn(newIndex, keyColumn.ColumnName, true));
-        //}
-        //if (newIndex.IndexedColumns.Count > 0)
-        //    outputTable.Indexes.Add(newIndex);
+        //    return sb.ToString();
         //}
 
 
+        public static string GenerateInsertSql(string tblName, ByHtmlTBLId htmlTblId, List<string[]> data)
+        {
+            StringBuilder sb = new StringBuilder();
 
+            string[] heads = data[0];
+            Dictionary<int, string> mapDict = new Dictionary<int,string>();
+            int idx = -1;
+            foreach (string s in heads)
+            {
+                idx = Array.IndexOf(htmlTblId.HeaderNameList, s);
+                if (idx < 0) continue;
+                mapDict[idx] = s;
+            }
 
+            sb.AppendFormat("INSERT INTO {0} ({1}) ", tblName, string.Join(", ", htmlTblId.FieldNameList));
 
-        //private ForeignKeyAction SQLActionTypeToSMO(Rule rule)
-        //{
-        //    string ruleStr = rule.ToString();
+            // data
+            sb.Append(" values ");
 
-        //    return (ForeignKeyAction)Enum.Parse(typeof(ForeignKeyAction), ruleStr);
-        //}
+            List<string[]> rawData = data.Skip(1).ToList();
+            foreach (KeyValuePair<int, string> kvp in mapDict)
+            {
+                string s = rawData[0][kvp.Key];
+                Console.WriteLine(s, kvp.Key);
+            }    
 
-        //private void DropExistingTable(string tableName)
-        //{
-        //    Table table = datebase.Tables[tableName];
-        //    if (table != null) table.Drop();
-        //}
-
-
+            //foreach (string[] stringList in data.Skip(0))
+            //{
+            //    foreach (string s in stringList)
+            //    {
+            //        //Console.Write(s.ToString());
+            //        sb.AppendFormat("()");
+            //    }
+            //}
+            return sb.ToString();
+        }
     }
 }

@@ -22,13 +22,13 @@ namespace xsd2sql
         [XmlElement("byMatching", IsNullable = true)]
         public ByMatching[] MatchingList { get; set; }
 
-        [XmlIgnore]
-        public HtmlFile HtmlFilesCount
-        {
-            get
-            {
-                return (HtmlFile == null) ? null : HtmlFile;
-            }
-        }
+        //[XmlIgnore]
+        //public int HtmlFilesCount
+        //{
+        //    get
+        //    {
+        //        return (HtmlFile == null) ? 0 : HtmlFile.FileNameCount;
+        //    }
+        //}
     }
 }

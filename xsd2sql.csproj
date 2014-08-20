@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ColMatchList.cs" />
     <Compile Include="DataSetObject\ByHtmlTBLId.cs" />
     <Compile Include="DataSetObject\ById.cs" />
     <Compile Include="DataSetObject\ByMatching.cs" />

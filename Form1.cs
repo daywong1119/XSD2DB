@@ -15,6 +15,7 @@ using System.Xml.XPath;
 using System.Xml.Serialization;
 using System.Collections;
 using HtmlAgilityPack;
+using xsd2sql.DataSetObject;
 namespace xsd2sql
 {
     public partial class Form1 : Form
@@ -23,7 +24,7 @@ namespace xsd2sql
         string openfilePath;
         List<string> sqlScript;
         string dbName;
-        string conn = "Data Source=localhost;User ID=sa;Password=Hi88geK!";
+        string conn = "Data Source=localhost;User ID=sa;Password=sa";
 
         public Form1()
         {
@@ -79,12 +80,6 @@ namespace xsd2sql
 
                 btnCreateDB.Enabled = true;
                 sqlScript = commandS;
-                //if ((MessageBox.Show("Do you want to create database?", "Options", MessageBoxButtons.YesNo)) == DialogResult.Yes)
-                //{
-                //    dbHelper.ExecuteSql(commandS.ToArray());
-                //    MessageBox.Show("Database Created");
-                //}
-
             }
             catch (FileNotFoundException ex)
             {
@@ -238,7 +233,6 @@ namespace xsd2sql
 
         //Use to store how many webpage Should be visit in order to grab data
         private ArrayList mFileBuffer = new ArrayList();
-
         private void btnReadTamplate_Click(object sender, EventArgs e)
         {
             //Read XML and Loop through elements
@@ -264,42 +258,75 @@ namespace xsd2sql
                 XmlReader reader = XmlReader.Create(openfilePath);
                 XmlSerializer serializer = new XmlSerializer(typeof(DatabaseObject));
                 DatabaseObject db = (DatabaseObject)serializer.Deserialize(reader);
+                SQLhelper.SQLhelper helper = new SQLhelper.SQLhelper();
+
+                //validation
+                int cnt = db.DbTables.Where(x=>x.HtmlFile.FileNameCount == 0).Count();
+                if (cnt > 0) {
+                    MessageBox.Show("Webpage path is not defined,please define <filename> tag");
+                    return;
+                }
+
+                // start to generate and insert
+                HtmlAgilityPack.HtmlDocument  doc = null;
+                WebDataController ctrl = null ;
+                List<string[]> data = null;
+                List<String> colName = new List<string>();
 
                 foreach (DbTbl tl in db.DbTables)
                 {
-                    if (tl.HtmlFile == null)
+                    foreach (string file in tl.HtmlFile.FileNameList)//Each HTML File
                     {
-                        MessageBox.Show("Webpage path is not defined,please define <htmlFile> tag");
-                        return;
-                    }
-                    if (tl.HtmlFile.FileNameCount == 0)
-                    {
-                        MessageBox.Show("Webpage path is not defined,please define <filename> tag");
-                        return;
+                        doc = new HtmlAgilityPack.HtmlDocument();
+                        //doc.Load(@"C:\temp\xsd2db-data\" + file);
+                        doc.Load(@"assets/" + file);
+
+                        ctrl = new WebDataController(doc);
+                        if (tl.HtmlTableIdList != null && tl.HtmlTableIdList.Length > 0)
+                        {
+                            foreach (ColMatch col in tl.HtmlTableIdList[0].ColMatchList) {//ADD Columns
+                                colName.Add(col.Value);
+                            }
+
+                            data = ctrl.ByHtmlTabelId(tl.HtmlTableIdList[0].TblId, colName);
+                            SQLhelper.SQLhelper.GenerateInsertSql(tl.TableName, tl.HtmlTableIdList[0], data);
+                        }
+
+                        if (tl.MatchingList != null && tl.MatchingList.Length > 0){}
                     }
 
-                    for (int i = 0; i < tl.HtmlFile.FileNameList.Length; i++)
-                    {
-                        String fn = tl.HtmlFile.FileNameList[i];
-                        mFileBuffer.Add(fn);
-                    }
+                    //db.DbTables[0].HtmlTableIdList[0].FieldNameList
+                    //if (tl.HtmlFile == null)
+                    //{
+                    //    MessageBox.Show("Webpage path is not defined,please define <htmlFile> tag");
+                    //    return;
+                    //}
+                    //if (tl.HtmlFile.FileNameCount == 0)
+                    //{
+                    //    MessageBox.Show("Webpage path is not defined,please define <filename> tag");
+                    //    return;
+                    //}
+                    //for (int i = 0; i < tl.HtmlFile.FileNameList.Length; i++)
+                    //{
+                    //    String fn = tl.HtmlFile.FileNameList[i];
+                    //    mFileBuffer.Add(fn);
+                    //}
                 }
 
-                for (int i = 0; i < mFileBuffer.Count; i++)
-                {
-                    //Parse hmtlfile
-                    String filename = mFileBuffer[i].ToString();
+                //for (int i = 0; i < mFileBuffer.Count; i++)
+                //{
+                //Parse hmtlfile
+                //String filename = mFileBuffer[0].ToString();
 
-                    HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-                    //doc.Load(@"C:\temp\xsd2db-data\" + filename);
-                    doc.Load(@"assets/" + filename);
+                //HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+                //doc.Load(@"C:\temp\xsd2db-data\" + filename);
+                ////doc.Load(@"assets/" + filename);
 
-                    WebDataController ctrl = new WebDataController(doc);
-                    List<List<String>> TablesData = ctrl.ByHtmlTabelId("staff");
+                //by Michael Data is extracted to 2 Dimension array , please add break point here to INSPECT
+                //MessageBox.Show(TablesData.ToString());
 
-                    //by Michael Data is extracted to 2 Dimension array , please add break point here to INSPECT
-                    MessageBox.Show(TablesData.ToString());
-                }
+                //string sql = helper.InsertStaff(db.DbName, "StaffTbl", 
+                //}
 
                 // by Dave
                 // check if [dbTBL] -> byhtmlTBLId length > 0 then binding the data into suitable object (entity)
