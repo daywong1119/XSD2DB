@@ -20,18 +20,12 @@ namespace xsd2sql
 {
     public class WebDataController
     {
-        HtmlAgilityPack.HtmlDocument doc;
+        private Boolean isMatchingStarted = false;
+        private List<String> matchingTitleBuffer;
+        private List<String> matchingDataBuffer;
+        private HtmlAgilityPack.HtmlDocument doc;
         public WebDataController(HtmlAgilityPack.HtmlDocument doc) { this.doc = doc; }
 
-        //By Dave
-        //public List<List<String>> ByHtmlTabelId(String id)
-        //{
-        //    List<String> tables = GetTableString(id);
-        //    List<List<String>> tablesData = TablesToData(tables);
-        //    return tablesData;
-        //}
-
-        //Michael
         public List<string[]> ByHtmlTabelId(String id,List<String> colNames)
         {
             List<String> tables = GetTableString(id);
@@ -39,9 +33,56 @@ namespace xsd2sql
             return tablesData;
         }
 
-        public void ByMatchingId(String id) { }
+        public void StartMatchingBuffer()
+        {
+            isMatchingStarted = true;
+            matchingTitleBuffer = new List<string>();
+            matchingDataBuffer = new List<string>();
+        }
+        public List<string[]> getMatchingResult()
+        {
+            List<string[]> result = new List<string[]>();
+            result.Add(matchingTitleBuffer.ToArray());
+            result.Add(matchingDataBuffer.ToArray());
+            isMatchingStarted = false;
+            return result;
+        }
 
-        public void ByMatchingString(String startString, String endString) { }
+        public void ByMatchingId(String id) { 
+            Boolean isMatched = false;
+            HtmlNodeCollection nodeCollection = doc.DocumentNode.SelectNodes("//*");
+            foreach (HtmlNode node in nodeCollection)
+            {
+                HtmlAttributeCollection attrs = node.Attributes;
+                foreach(HtmlAttribute attr in attrs){ //MessageBox.Show("Matching "+attr.Value+" vs "+id);
+                    if (attr.Value.Equals(id))
+                        isMatched = true;
+                }
+                if (isMatched) {//MessageBox.Show("FOUND = "+node.InnerText);
+                    matchingTitleBuffer.Add(id);
+                    matchingDataBuffer.Add(node.InnerText);
+                    isMatched = false;
+                }
+            }
+        }
+
+        public void ByMatchingString(String filedName, String startString, String endString) {
+            int indexStart;
+            int indexEnd;
+            String data = doc.DocumentNode.InnerHtml.Trim();
+            indexStart = data.IndexOf(startString);
+            if (indexStart != -1)
+            {
+                String subData = data.Substring(indexStart);
+                indexEnd = subData.IndexOf(endString);
+                if (indexEnd != -1)
+                {//MessageBox.Show(data.Substring(indexStart + startString.Length, indexEnd - startString.Length));
+                    matchingTitleBuffer.Add(filedName);
+                    matchingDataBuffer.Add(data.Substring(indexStart + startString.Length, indexEnd - startString.Length));
+
+                }
+            }
+        }
 
         //Get every <table>...</table> in the HTML Documents
         private List<String> GetTableString(String id)

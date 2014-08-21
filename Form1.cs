@@ -282,17 +282,35 @@ namespace xsd2sql
                         doc.Load(@"assets/" + file);
 
                         ctrl = new WebDataController(doc);
-                        if (tl.HtmlTableIdList != null && tl.HtmlTableIdList.Length > 0)
+                        if (tl.HtmlTableIdList != null && tl.HtmlTableIdList.Length > 0)//Check if this XML HAS <byhtmlTBLId> Tag
                         {
+                           
                             foreach (ColMatch col in tl.HtmlTableIdList[0].ColMatchList) {//ADD Columns
-                                colName.Add(col.Value);
+                               colName.Add(col.Value);
                             }
-
                             data = ctrl.ByHtmlTabelId(tl.HtmlTableIdList[0].TblId, colName);
                             SQLhelper.SQLhelper.GenerateInsertSql(tl.TableName, tl.HtmlTableIdList[0], data);
                         }
 
-                        if (tl.MatchingList != null && tl.MatchingList.Length > 0){}
+                        if (tl.MatchingList != null && tl.MatchingList.Length > 0)//Check if this XML HAS <<byMatching>> Tag
+                        {
+                            foreach(ByMatching matchTag in tl.MatchingList){
+                                ctrl.StartMatchingBuffer();
+                                foreach (ByStr byStrTag in matchTag.ByStrList) {
+                                    //MessageBox.Show("By String");
+                                    ctrl.ByMatchingString(byStrTag.FieldName, byStrTag.StartStr,byStrTag.EndStr);
+                                }
+                                foreach (ById byIdTag in matchTag.ByIdList) {
+                                    //MessageBox.Show("By id=" + byIdTag.FieldName);
+                                    ctrl.ByMatchingId(byIdTag.FieldName);
+                                }
+                                List<String[]> matchingResult = ctrl.getMatchingResult();
+                                if (matchingResult != null) {
+                                    MessageBox.Show("Michael Show time| B-)");
+                                }
+                            }
+                            
+                        }
                     }
 
                     //db.DbTables[0].HtmlTableIdList[0].FieldNameList

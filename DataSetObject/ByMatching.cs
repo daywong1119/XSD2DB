@@ -10,7 +10,7 @@ namespace xsd2sql.DataSetObject
     public class ByMatching
     {
         [XmlElement("byId")]
-        public ById ById { get; set; }
+        public ById[] ByIdList { get; set; }
         [XmlElement("byStr")]
         public ByStr[] ByStrList { get; set; }
     }
