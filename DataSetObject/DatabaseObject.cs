@@ -14,5 +14,14 @@ namespace xsd2sql
         public string DbName { get; set; }
         [XmlElement("dbTBL")]
         public DbTbl[] DbTables { get; set; }
+
+        public string[] AllTableNames
+        {
+            get
+            {
+                if (DbTables == null || DbTables.Length == 0) return null;
+                return DbTables.Select(x => x.TableName).ToArray();
+            }
+        }
     }
 }

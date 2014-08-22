@@ -38,7 +38,7 @@ namespace xsd2sql
             btnCreateDB.Enabled = false;
         }
 
-        private void btnGenerate_Click(object sender, EventArgs e)
+        private void btnGenerate_Click_1(object sender, EventArgs e)
         {
             DataSet dataset = new DataSet();
             XmlReader reader = null;
@@ -184,7 +184,7 @@ namespace xsd2sql
             return dbKeyS;
         }
 
-        private void btnLoad_Click(object sender, EventArgs e)
+        private void btnLoad_Click_1(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtPath.Text))
             {
@@ -202,7 +202,7 @@ namespace xsd2sql
             }
         }
 
-        private void btnBrowse_Click(object sender, EventArgs e)
+        private void btnBrowse_Click_1(object sender, EventArgs e)
         {
             //dialogOpenFile.ShowDialog();
             if (dialogOpenFile.ShowDialog() == DialogResult.OK)
@@ -212,7 +212,7 @@ namespace xsd2sql
             }
         }
 
-        private void btnCreateDB_Click(object sender, EventArgs e)
+        private void btnCreateDB_Click_1(object sender, EventArgs e)
         {
             DataSet tableDS = new DataSet();
             DataSet columnDS = new DataSet();
@@ -233,7 +233,7 @@ namespace xsd2sql
 
         //Use to store how many webpage Should be visit in order to grab data
         private ArrayList mFileBuffer = new ArrayList();
-        private void btnReadTamplate_Click(object sender, EventArgs e)
+        private void btnReadTamplate_Click_1(object sender, EventArgs e)
         {
             //Read XML and Loop through elements
             if (string.IsNullOrEmpty(txtPath.Text))
@@ -261,17 +261,20 @@ namespace xsd2sql
                 SQLhelper.SQLhelper helper = new SQLhelper.SQLhelper();
 
                 //validation
-                int cnt = db.DbTables.Where(x=>x.HtmlFile.FileNameCount == 0).Count();
-                if (cnt > 0) {
+                int cnt = db.DbTables.Where(x => x.HtmlFile.FileNameCount == 0).Count();
+                if (cnt > 0)
+                {
                     MessageBox.Show("Webpage path is not defined,please define <filename> tag");
                     return;
                 }
 
                 // start to generate and insert
-                HtmlAgilityPack.HtmlDocument  doc = null;
-                WebDataController ctrl = null ;
+                HtmlAgilityPack.HtmlDocument doc = null;
+                WebDataController ctrl = null;
                 List<string[]> data = null;
                 List<String> colName = new List<string>();
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("USE " + db.DbName + ";");
 
                 foreach (DbTbl tl in db.DbTables)
                 {
@@ -284,73 +287,60 @@ namespace xsd2sql
                         ctrl = new WebDataController(doc);
                         if (tl.HtmlTableIdList != null && tl.HtmlTableIdList.Length > 0)//Check if this XML HAS <byhtmlTBLId> Tag
                         {
-                           
-                            foreach (ColMatch col in tl.HtmlTableIdList[0].ColMatchList) {//ADD Columns
-                               colName.Add(col.Value);
+
+                            foreach (ColMatch col in tl.HtmlTableIdList[0].ColMatchList)
+                            {//ADD Columns
+                                colName.Add(col.Value);
                             }
                             data = ctrl.ByHtmlTabelId(tl.HtmlTableIdList[0].TblId, colName);
-                            SQLhelper.SQLhelper.GenerateInsertSql(tl.TableName, tl.HtmlTableIdList[0], data);
+                            sb.AppendLine(SQLhelper.SQLhelper.GenerateInsertSql(tl.TableName, tl.HtmlTableIdList[0], data));
                         }
 
                         if (tl.MatchingList != null && tl.MatchingList.Length > 0)//Check if this XML HAS <<byMatching>> Tag
                         {
-                            foreach(ByMatching matchTag in tl.MatchingList){
+                            foreach (ByMatching matchTag in tl.MatchingList)
+                            {
                                 ctrl.StartMatchingBuffer();
-                                foreach (ByStr byStrTag in matchTag.ByStrList) {
-                                    //MessageBox.Show("By String");
-                                    ctrl.ByMatchingString(byStrTag.FieldName, byStrTag.StartStr,byStrTag.EndStr);
-                                }
-                                foreach (ById byIdTag in matchTag.ByIdList) {
-                                    //MessageBox.Show("By id=" + byIdTag.FieldName);
+                                foreach (ById byIdTag in matchTag.ByIdList)
+                                {
                                     ctrl.ByMatchingId(byIdTag.FieldName);
                                 }
+                                foreach (ByStr byStrTag in matchTag.ByStrList)
+                                {
+                                    ctrl.ByMatchingString(byStrTag.FieldName, byStrTag.StartStr, byStrTag.EndStr);
+                                }
                                 List<String[]> matchingResult = ctrl.getMatchingResult();
-                                if (matchingResult != null) {
-                                    MessageBox.Show("Michael Show time| B-)");
+                                if (matchingResult != null)
+                                {
+                                    sb.AppendLine(SQLhelper.SQLhelper.GenerateInsertSql(tl.TableName, tl.MatchingList[0], matchingResult));
                                 }
                             }
-                            
                         }
                     }
-
-                    //db.DbTables[0].HtmlTableIdList[0].FieldNameList
-                    //if (tl.HtmlFile == null)
-                    //{
-                    //    MessageBox.Show("Webpage path is not defined,please define <htmlFile> tag");
-                    //    return;
-                    //}
-                    //if (tl.HtmlFile.FileNameCount == 0)
-                    //{
-                    //    MessageBox.Show("Webpage path is not defined,please define <filename> tag");
-                    //    return;
-                    //}
-                    //for (int i = 0; i < tl.HtmlFile.FileNameList.Length; i++)
-                    //{
-                    //    String fn = tl.HtmlFile.FileNameList[i];
-                    //    mFileBuffer.Add(fn);
-                    //}
                 }
 
-                //for (int i = 0; i < mFileBuffer.Count; i++)
+                //SQLhelper.SQLhelper sqlHelper = new SQLhelper.SQLhelper(conn);
+                //sqlHelper.ExecuteSql(sb.ToString());
+                //MessageBox.Show("Record Insert!");
+
+                //DataSet tableDS = new DataSet();
+                //tableDS = sqlHelper.QueryAllRecordsFromTable(db.DbName, "StaffTBL");
+                //for (int i = 0; i < tableDS.Tables.Count; i++)
                 //{
-                //Parse hmtlfile
-                //String filename = mFileBuffer[0].ToString();
-
-                //HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-                //doc.Load(@"C:\temp\xsd2db-data\" + filename);
-                ////doc.Load(@"assets/" + filename);
-
-                //by Michael Data is extracted to 2 Dimension array , please add break point here to INSPECT
-                //MessageBox.Show(TablesData.ToString());
-
-                //string sql = helper.InsertStaff(db.DbName, "StaffTbl", 
+                //   staffGV.DataSource = tableDS.Tables[i];
                 //}
 
-                // by Dave
-                // check if [dbTBL] -> byhtmlTBLId length > 0 then binding the data into suitable object (entity)
-                // check if [dbTBL] -> byMatching length > 0 then binding the data into suitable object (entity)
+                //tableDS.Clear();
+                staffGV.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
 
+                //tableDS = sqlHelper.QueryAllRecordsFromTable(db.DbName, "OrderTBL");
+                //for (int i = 0; i < tableDS.Tables.Count; i++)
+                //{
+                //    orderGV.DataSource = tableDS.Tables[i];
+                //}
 
+                //tableDS.Clear();
+                orderGV.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
             }
             catch (Exception ex)
             {
@@ -358,5 +348,7 @@ namespace xsd2sql
             }
 
         }
+
+
     }
 }

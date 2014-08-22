@@ -11,5 +11,7 @@ namespace xsd2sql.DataSetObject
     {
         [XmlAttribute("fieldName")]
         public string FieldName { get; set; }
+        [XmlText]
+        public string Value { get; set; }
     }
 }

@@ -7,7 +7,6 @@ using System.IO;
 using System.Text;
 using Microsoft.SqlServer.Management.Smo;
 using xsd2sql;
-using xsd2sql.entity;
 using xsd2sql.DataSetObject;
 
 namespace SQLhelper
@@ -61,6 +60,24 @@ namespace SQLhelper
             }
         }
 
+        public void ExecuteSql(string sqlCommand)
+        {
+            try
+            {
+                connection.Open();
+                comm = new SqlCommand(sqlCommand, connection);
+                comm.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
         public DataSet QueryAllTablesFromDatabase(string dbName)
         {
             SqlDataAdapter da = new SqlDataAdapter();
@@ -71,27 +88,30 @@ namespace SQLhelper
 
 
             connection.Open();
-            
-            
+
+
             da = new SqlDataAdapter(sb.ToString(), connection);
             da.Fill(ds);
             connection.Close();
             return ds;
-            
+
         }
 
-        //private void CreateTables(DataTableCollection tables)
-        //{
-        //    foreach (DataTable table in tables)
-        //    {
-        //        DropExistingTable(table.TableName);
-        //        Table newTable = new Table(datebase, table.TableName);
+        public DataSet QueryAllRecordsFromTable(string dbName, string tableName)
+        {
+            SqlDataAdapter da = new SqlDataAdapter();
+            StringBuilder sb = new StringBuilder();
+            DataSet ds = new DataSet();
+            sb.AppendLine("USE " + dbName + ";");
+            sb.AppendLine("SELECT * FROM " + tableName + ";");
 
-        //        PopulateTable(ref newTable, table);
-        //        SetPrimaryKeys(ref newTable, table);
-        //        newTable.Create();
-        //    }
-        //}
+            connection.Open();
+
+            da = new SqlDataAdapter(sb.ToString(), connection);
+            da.Fill(ds);
+            connection.Close();
+            return ds;
+        }
 
         public string CreateTableAndColumn(DataSet sourceDataSet, Dictionary<string, XsPrimaryKey> pKeyDict, Dictionary<string, XsPrimaryKey> fKeyDict)
         {
@@ -211,21 +231,21 @@ namespace SQLhelper
                         Name varchar(10) NOT NULL,
                         EnrollmentDate Datetime,
                         StudyYear Datetime,
-			            CONSTRAINT PKStudent PRIMARY KEY (SID)
+                        CONSTRAINT PKStudent PRIMARY KEY (SID)
 			
             );
             
             
             Create table Registration
             (
-			            SID varchar(10),
+                        SID varchar(10),
                         ModuleID varchar NOT NULL,
                         Title Datetime,
                         ModuleOutline Datetime,
                         Year int,
                         Grade varchar(10),
                         CONSTRAINT PKRegistration PRIMARY KEY (SID, ModuleID, Year),
-			            CONSTRAINT FKStudent FOREIGN KEY (SID) REFERENCES Student(SID)
+                        CONSTRAINT FKStudent FOREIGN KEY (SID) REFERENCES Student(SID)
             );
          */
 
@@ -276,7 +296,7 @@ namespace SQLhelper
             StringBuilder sb = new StringBuilder();
 
             string[] heads = data[0];
-            Dictionary<int, string> mapDict = new Dictionary<int,string>();
+            Dictionary<int, string> mapDict = new Dictionary<int, string>();
             int idx = -1;
             foreach (string s in heads)
             {
@@ -288,24 +308,94 @@ namespace SQLhelper
             sb.AppendFormat("INSERT INTO {0} ({1}) ", tblName, string.Join(", ", htmlTblId.FieldNameList));
 
             // data
-            sb.Append(" values ");
-
+            sb.Append(" VALUES ");
             List<string[]> rawData = data.Skip(1).ToList();
+            string valueStr = null;
+            List<string> values = new List<string>();
+            List<string> temp = new List<string>();
             foreach (KeyValuePair<int, string> kvp in mapDict)
             {
-                string s = rawData[0][kvp.Key];
-                Console.WriteLine(s, kvp.Key);
-            }    
+                valueStr += "(";
+                for (int i = 0; i < rawData.Count; i++)
+                {
+                    temp.Add(AddQuote(rawData[kvp.Key][i]));
+                }
 
-            //foreach (string[] stringList in data.Skip(0))
-            //{
-            //    foreach (string s in stringList)
-            //    {
-            //        //Console.Write(s.ToString());
-            //        sb.AppendFormat("()");
-            //    }
-            //}
+                valueStr += string.Join(", ", temp.ToArray());
+
+                valueStr += ")";
+                values.Add(valueStr);
+                valueStr = null;
+                temp.Clear();
+            }
+
+            string st = string.Join(", ", values.ToArray());
+            sb.Append(st);
+            sb.Append(";");
             return sb.ToString();
+
+
+
+            /*
+            insert into StaffTBL
+            (staffId, staffName, joinYear)
+            values
+            ('6', 'abc', 2014),
+            ('4', 'abc', 2014),
+            ('5', 'abc', 2014);
+             */
+        }
+
+        public static string GenerateInsertSql(string tblName, ByMatching matching, List<string[]> data)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            string[] headers = data[0];
+            sb.AppendFormat("INSERT INTO {0} ({1}) ", tblName, string.Join(", ", headers));
+
+            // data
+            sb.Append(" VALUES ");
+            List<string[]> rawData = data.Skip(1).ToList();
+            string valueStr = null;
+            List<string> values = new List<string>();
+            List<string> temp = new List<string>();
+            valueStr += "(";
+
+            foreach (string[] strArry in rawData)
+            {
+                for (int i = 0; i < strArry.Length; i++)
+                {
+                    temp.Add(AddQuote(strArry[i]));
+                }
+            }
+            valueStr += string.Join(", ", temp.ToArray());
+
+            valueStr += ")";
+            values.Add(valueStr);
+            valueStr = null;
+            temp.Clear();
+
+            string st = string.Join(", ", values.ToArray());
+            sb.Append(st);
+            sb.Append(";");
+            return sb.ToString();
+
+
+
+            /*
+            INSERT INTO OrderTBL
+            (orderId, orderDate, orderAmt, staffId)
+            values
+            (N'IN000001', N'2012-01-24', N'10000', N'SA1234'),
+            (N'IN000002', N'2012-01-30', N'20000', N'SA1234');
+             */
+        }
+
+        public static string AddQuote(string s)
+        {
+            if (s == null) return null;
+
+            return string.Format("N'{0}'", s.Replace("'", "''"));
         }
     }
 }

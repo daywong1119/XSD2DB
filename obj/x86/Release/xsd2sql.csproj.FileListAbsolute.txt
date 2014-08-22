@@ -46,3 +46,14 @@ C:\Projects\XSD2DB\obj\x86\Release\xsd2sql.csprojResolveAssemblyReference.cache
 C:\Projects\XSD2DB\obj\x86\Release\xsd2sql.Form1.resources
 C:\Projects\XSD2DB\obj\x86\Release\xsd2sql.Properties.Resources.resources
 C:\Projects\XSD2DB\obj\x86\Release\xsd2sql.csproj.GenerateResource.Cache
+C:\Users\Michael\Desktop\XSD2DB-master\bin\Release\xsd2sql.exe
+C:\Users\Michael\Desktop\XSD2DB-master\bin\Release\xsd2sql.pdb
+C:\Users\Michael\Desktop\XSD2DB-master\bin\Release\HtmlAgilityPack.dll
+C:\Users\Michael\Desktop\XSD2DB-master\bin\Release\HtmlAgilityPack.pdb
+C:\Users\Michael\Desktop\XSD2DB-master\bin\Release\HtmlAgilityPack.xml
+C:\Users\Michael\Desktop\XSD2DB-master\obj\x86\Release\xsd2sql.csprojResolveAssemblyReference.cache
+C:\Users\Michael\Desktop\XSD2DB-master\obj\x86\Release\xsd2sql.Form1.resources
+C:\Users\Michael\Desktop\XSD2DB-master\obj\x86\Release\xsd2sql.Properties.Resources.resources
+C:\Users\Michael\Desktop\XSD2DB-master\obj\x86\Release\xsd2sql.csproj.GenerateResource.Cache
+C:\Users\Michael\Desktop\XSD2DB-master\obj\x86\Release\xsd2sql.exe
+C:\Users\Michael\Desktop\XSD2DB-master\obj\x86\Release\xsd2sql.pdb
